@@ -1,7 +1,7 @@
 package arrays;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import javax.lang.model.type.MirroredTypeException;
+import java.util.*;
 
 /**
  * LeetCode 347 — Top K Frequent Elements
@@ -29,12 +29,35 @@ import java.util.PriorityQueue;
 public class P0347TopKFrequentElements {
 
     public int[] topKFrequent(int[] nums, int k) {
-        // TODO: implement
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        int n = nums.length;
+        List<Integer>[] buckets = new List[n + 1];
+        Map<Integer, Integer> map = new HashMap<>();
 
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
 
+        map.forEach((integer, integer2) -> {
+            if (buckets[integer2] == null) {
+                buckets[integer2] = new ArrayList<>();
+            }
+            buckets[integer2].add(integer);
+        });
 
-        return new int[0];
+        int[] res = new int[k];
+        int index = 0;
+        for (int i = buckets.length - 1; i >= 0; i--) {
+            List<Integer> currentBucket = buckets[i];
+            if (currentBucket == null) continue;
+
+            for (Integer integer : currentBucket) {
+                if (index < k) {
+                    res[index++] = integer;
+                }
+            }
+        }
+
+        return res;
     }
 
     public static void main(String[] args) {
